@@ -1,0 +1,51 @@
+2020-08-19 20:50:37 PM - INFO - report_query: Script started
+2020-08-19 20:50:47 PM - INFO - report_query: Script started
+2020-08-19 20:50:47 PM - INFO - gui: Widget are formed
+2020-08-19 20:50:47 PM - INFO - gui: Show Query Window
+2020-08-19 20:50:47 PM - INFO - gui: Query Window closed. Script finished
+2020-08-19 20:51:03 PM - INFO - report_query: Script started
+2020-08-19 20:51:03 PM - INFO - gui: Widget are formed
+2020-08-19 20:51:03 PM - INFO - gui: Show Query Window
+2020-08-19 20:51:03 PM - INFO - gui: Query Window closed. Script finished
+2020-08-19 20:53:03 PM - INFO - report_query: Script started
+2020-08-19 20:53:03 PM - INFO - gui: Widget are formed
+2020-08-19 20:53:03 PM - INFO - gui: Show Query Window
+2020-08-19 20:53:03 PM - INFO - gui: Query Window closed. Script finished
+2020-08-19 20:53:07 PM - INFO - report_query: Script started
+2020-08-19 20:53:07 PM - INFO - gui: Widget are formed
+2020-08-19 20:53:07 PM - INFO - gui: Show Query Window
+2020-08-19 20:53:08 PM - INFO - gui: Query Window closed. Script finished
+2020-08-19 20:53:41 PM - INFO - report_query: Script started
+2020-08-19 20:53:41 PM - INFO - gui: Widget are formed
+2020-08-19 20:53:41 PM - INFO - gui: Show Query Window
+2020-08-19 20:53:41 PM - INFO - gui: Query Window closed. Script finished
+2020-08-19 20:53:47 PM - CRITICAL - gui: name 'os' is not defined
+2020-08-19 20:53:50 PM - CRITICAL - gui: name 'os' is not defined
+2020-08-19 20:56:32 PM - INFO - report_query: Script started
+2020-08-19 20:56:32 PM - INFO - gui: Widget are formed
+2020-08-19 20:56:32 PM - INFO - gui: Show Query Window
+2020-08-19 20:56:32 PM - INFO - gui: Query Window closed. Script finished
+2020-08-19 20:56:37 PM - CRITICAL - gui: 'str' object has no attribute 'exists'
+2020-08-19 20:56:38 PM - CRITICAL - gui: 'str' object has no attribute 'exists'
+2020-08-19 20:58:39 PM - INFO - report_query: Script started
+2020-08-19 20:58:39 PM - INFO - gui: Widget are formed
+2020-08-19 20:58:39 PM - INFO - gui: Show Query Window
+2020-08-19 20:58:40 PM - INFO - gui: Query Window closed. Script finished
+2020-08-19 20:58:45 PM - INFO - gui: Try to download report from http://download.hexun.com/ftp/all_stockdata_2009/all/063\943\63943070.PDF to local
+2020-08-19 21:00:23 PM - INFO - report_query: Script started
+2020-08-19 21:00:23 PM - INFO - gui: Widget are formed
+2020-08-19 21:00:23 PM - INFO - gui: Show Query Window
+2020-08-19 21:00:23 PM - INFO - gui: Query Window closed. Script finished
+2020-08-19 21:00:31 PM - INFO - gui: Try to download report from http://download.hexun.com/ftp/all_stockdata_2009/all/120\615\1206157977.PDF to local
+2020-08-19 21:00:44 PM - INFO - gui: Try to download report from http://download.hexun.com/ftp/all_stockdata_2009/all/120\657\1206574708.PDF to local
+2020-08-19 21:01:42 PM - INFO - report_query: Script started
+2020-08-19 21:01:42 PM - INFO - gui: Widget are formed
+2020-08-19 21:01:42 PM - INFO - gui: Show Query Window
+2020-08-19 21:01:42 PM - INFO - gui: Query Window closed. Script finished
+2020-08-19 21:01:51 PM - INFO - gui: Try to download report from http://download.hexun.com/ftp/all_stockdata_2009/all/120\034\1200340029.PDF to local
+2020-08-19 21:03:09 PM - INFO - report_query: Script started
+2020-08-19 21:03:09 PM - INFO - gui: Widget are formed
+2020-08-19 21:03:09 PM - INFO - gui: Show Query Window
+2020-08-19 21:03:09 PM - INFO - gui: Query Window closed. Script finished
+2020-08-19 21:03:20 PM - INFO - gui: Try to download report from http://download.hexun.com/ftp/all_stockdata_2009/all/120\017\1200176886.PDF to local
+2020-08-19 21:03:44 PM - INFO - gui: Try to download report from http://download.hexun.com/ftp/all_stockdata_2009/all/120\764\1207644473.PDF to local
