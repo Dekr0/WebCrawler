@@ -12,28 +12,46 @@ import config
 __all__ = ["RequestFactory"]
 
 
-class BaseRequest(object):
+class WebsiteRequest(object):
+
+    """
+    A generic class for sending request to website. All the inherited class will
+    use the same request() and close() methods.
+
+    All the inherited class will implement their own set_search_parameter()
+    methods to construct a formatted string, which includes the search parameters
+    . The format of that string is varied depend on which website you want to
+    search.
+    """
 
     def __init__(self, url):
-        self.base_url = url  # Website main page
-        self.request_url = ""  # Interface of the website
+        """
+        website_url : Url to website main page
+
+        search_parameters : A formatted string that include all the search
+        parameter. The format depends on what website you want to search
+
+        :param url: Url to website main page
+        """
+
+        self.website_url = url
+        self.search_parameters = ""
         self.session = requests_html.HTMLSession()
         self.__user_agent = fake_useragent.UserAgent()
 
-        # self.__proxy_agent = proxy.FakeProxy()
 
     def request(self):
         """
         Send request to the website and get the response
 
-        :return:
+        :return: A response instance. Usually it is the first page of the search
+        result
         """
 
-        # Connect main page link with interface link
-        url = self.base_url + self.request_url
+        request_url = self.website_url + self.search_parameters
 
         headers = {
-            "Referer": url,
+            "Referer": request_url,
             "User-Agent": self.__user_agent.random
         }
 
@@ -44,9 +62,7 @@ class BaseRequest(object):
         # Timeout if it cannot acquire the response after requesting 5 times
         while not response:
             try:
-                # proxies = self.__proxy_agent.get_proxy()
-
-                response = self.session.get(url, headers=headers)
+                response = self.session.get(request_url, headers=headers)
             except Exception as error:
                 logging.error(error, exc_info=True)
 
@@ -67,7 +83,7 @@ class BaseRequest(object):
             self.session = None
 
 
-class IndeedRequest(BaseRequest):
+class IndeedRequest(WebsiteRequest):
 
     __params_type = {
         "keyword": "q=",
@@ -80,28 +96,44 @@ class IndeedRequest(BaseRequest):
         self.__params = params
 
     def set_search_parameter(self, next_page):
-        self.request_url = "/jobs?"
+        """
+        Joint the search parameter and the URL of Indeed main page together.
+        Use for sending request to Indeed
+
+        :param next_page: ...
+        :return:
+        """
+
+        self.search_parameters = "/jobs?"
 
         for i, key in enumerate(self.__params.keys()):
             if self.__params[key]:
-                self.request_url += f"{self.__params_type[key]}{self.__params[key]}"
+                self.search_parameters += f"{self.__params_type[key]}{self.__params[key]}"
 
         if next_page > 0:
-            self.request_url += f"&start={next_page}0"
+            # Correct the format of the page index in the search parameter. If
+            # the current page is not the first page, it needs to append an
+            # extra 0 at the end (greater than 9 : 100, 110, 120, etc.)
+            self.search_parameters += f"&start={next_page}0"
 
 
-class JobBankRequest(BaseRequest):
+class JobBankRequest(WebsiteRequest):
 
     pass
 
 
 class RequestFactory(object):
 
-    __request_type = {
+    """
+    This class is used for initialization of a website request based on what
+    website you to search for.
+    """
+
+    __website_request = {
         "indeed": IndeedRequest,
         "jobbank": JobBankRequest,
     }
 
     @classmethod
     def get_request(cls, option):
-        return cls.__request_type[option]
+        return cls.__website_request[option]

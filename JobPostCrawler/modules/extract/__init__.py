@@ -3,6 +3,6 @@ import importlib
 
 def get(site):
     module_name = importlib.import_module(f"modules.extract.{site}", "extract")
-    handle_func = getattr(module_name, "handle")
+    main = getattr(module_name, "main")
 
-    return handle_func
+    return main

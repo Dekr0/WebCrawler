@@ -1,12 +1,12 @@
 import logging
 
 import modules.util as util
-import modules.models as models
+import modules.jobtype as jobtype
 
 
-def handle(jobs):
+def main(jobs):
     writer = util.SQLUtil()
-    columns_def = models.IndeedJobs.get_columns_def()
+    columns_def = jobtype.IndeedJob.get_columns_def()
 
     if not writer.table_exist("Indeed"):
         writer.create_table("Indeed", columns_def)

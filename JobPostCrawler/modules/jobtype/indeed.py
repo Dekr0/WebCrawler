@@ -4,32 +4,8 @@
 
 import datetime
 
-import modules.models.structure as structure
 
-
-class IndeedJobsSet:
-
-    def __init__(self):
-        self.__jobs_list = []
-        self.__index = 0
-
-    def __len__(self):
-        return len(self.__jobs_list)
-
-    def __iter__(self):
-        return iter(self.__jobs_list)
-
-    def add_job(self, job):
-        self.__jobs_list.append(job)
-
-
-class IndeedJobPosts(structure.IterableQueue):
-
-    def __init__(self):
-        super(IndeedJobPosts, self).__init__()
-
-
-class IndeedJobs:
+class IndeedJob:
 
     def __init__(self, company, day_post, id, link, location, summary, title):
         self.company = company
@@ -43,7 +19,12 @@ class IndeedJobs:
 
     @staticmethod
     def get_columns_def():
-         columns_def = {
+        """
+        :return: a dictionary that specify the data type and length in SQL for each
+        column
+        """
+
+        columns_def = {
             "Id": "VARCHAR(32)",
             "Title": "VARCHAR(MAX)",
             "Location": "VARCHAR(60)",
@@ -54,10 +35,13 @@ class IndeedJobs:
             "UpdateTime": "VARCHAR(120)",
          }
 
-         return columns_def
-
+        return columns_def
 
     def get_info(self):
+        """
+        :return: job information
+        """
+
         info = {
             "Id": self.id,
             "Title": self.title,

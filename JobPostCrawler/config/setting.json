@@ -1,7 +1,7 @@
 {
-  "site": "indeed",
+  "website": "indeed",
   "parameters": {
     "keyword": "Computer Engineer",
-    "location": ""
+    "location": "Toronto, ON"
   }
 }

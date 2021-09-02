@@ -1,11 +1,12 @@
 import modules.util.agent as agent
 import modules.util.encoder as encoder
-import modules.util.proxy as proxy
-import modules.util.responses as responses
 import modules.util.sql as sql
+import modules.util.logger as logger
 
 
-IndeedWebPage = responses.IndeedWebPage
+info = logger.info
+
+error = logger.error
 
 RequestFactory = agent.RequestFactory
 

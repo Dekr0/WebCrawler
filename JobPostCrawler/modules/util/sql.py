@@ -25,10 +25,10 @@ class SQLUtil:
         return False
 
     def create_table(self, table, columns_def):
-        column_definition = ", ".join([f"{column_name} {_type}"
+        column_declaration = ", ".join([f"{column_name} {_type}"
                             for column_name, _type in columns_def.items()])
 
-        query = f"CREATE TABLE {table} (" + column_definition + ")"
+        query = f"CREATE TABLE {table} (" + column_declaration + ")"
 
         self.__cursor.execute(query)
         self.__conn.commit()
