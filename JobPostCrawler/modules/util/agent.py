@@ -4,8 +4,6 @@
 import fake_useragent
 import logging
 import requests_html
-import traceback
-
 import config
 
 
@@ -26,18 +24,18 @@ class WebsiteRequest(object):
 
     def __init__(self, url):
         """
-        website_url : Url to website main page
+        websiteUrl : Url to website main page
 
-        search_parameters : A formatted string that include all the search
+        searchParameters : A formatted string that include all the search
         parameter. The format depends on what website you want to search
 
         :param url: Url to website main page
         """
 
-        self.website_url = url
-        self.search_parameters = ""
+        self.websiteUrl = url
+        self.searchParameters = ""
         self.session = requests_html.HTMLSession()
-        self.__user_agent = fake_useragent.UserAgent()
+        self.__userAgent = fake_useragent.UserAgent()
 
 
     def request(self):
@@ -48,11 +46,11 @@ class WebsiteRequest(object):
         result
         """
 
-        request_url = self.website_url + self.search_parameters
+        requestUrl = self.websiteUrl + self.searchParameters
 
         headers = {
-            "Referer": request_url,
-            "User-Agent": self.__user_agent.random
+            "Referer": requestUrl,
+            "User-Agent": self.__userAgent.random
         }
 
         response = None
@@ -62,7 +60,7 @@ class WebsiteRequest(object):
         # Timeout if it cannot acquire the response after requesting 5 times
         while not response:
             try:
-                response = self.session.get(request_url, headers=headers)
+                response = self.session.get(requestUrl, headers=headers)
             except Exception as error:
                 logging.error(error, exc_info=True)
 
@@ -85,13 +83,13 @@ class WebsiteRequest(object):
 
 class IndeedRequest(WebsiteRequest):
 
-    __params_type = {
+    paramsType = {
         "keyword": "q=",
         "location": "&l=",
     }
 
     def __init__(self, params):
-        super(IndeedRequest, self).__init__(config.website_urls["indeed"])
+        super(IndeedRequest, self).__init__(config.websiteURLs["indeed"])
 
         self.__params = params
 
@@ -104,17 +102,17 @@ class IndeedRequest(WebsiteRequest):
         :return:
         """
 
-        self.search_parameters = "/jobs?"
+        self.searchParameters = "/jobs?"
 
         for i, key in enumerate(self.__params.keys()):
             if self.__params[key]:
-                self.search_parameters += f"{self.__params_type[key]}{self.__params[key]}"
+                self.searchParameters += f"{self.paramsType[key]}{self.__params[key]}"
 
         if next_page > 0:
             # Correct the format of the page index in the search parameter. If
             # the current page is not the first page, it needs to append an
             # extra 0 at the end (greater than 9 : 100, 110, 120, etc.)
-            self.search_parameters += f"&start={next_page}0"
+            self.searchParameters += f"&start={next_page}0"
 
 
 class JobBankRequest(WebsiteRequest):
@@ -129,11 +127,11 @@ class RequestFactory(object):
     website you to search for.
     """
 
-    __website_request = {
+    __websiteRequest = {
         "indeed": IndeedRequest,
         "jobbank": JobBankRequest,
     }
 
     @classmethod
     def get_request(cls, option):
-        return cls.__website_request[option]
+        return cls.__websiteRequest[option]

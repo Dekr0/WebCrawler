@@ -1,4 +1,3 @@
-import logging
 import re
 
 import modules.util as util
@@ -20,8 +19,8 @@ class IndeedWebPage:
         :param params: a formatted string that include the search parameter
         """
 
-        self.next_page = 0  # Page index starts from 0
-        self.request_agent = util.RequestFactory.get_request("indeed")(params)
+        self.nextPage = 0  # Page index starts from 0
+        self.requestAgent = util.RequestFactory.get_request("indeed")(params)
         self.response = None
 
     def close(self):
@@ -42,24 +41,24 @@ class IndeedWebPage:
         :return: None
         """
 
-        self.request_agent.close()
+        self.requestAgent.close()
 
-    def get_next_webpage(self):
+    def getNextWebpage(self):
         """
         Get the response of the next webpage from the search result
 
         :return: None
         """
 
-        self.request_agent.set_search_parameter(self.next_page)
-        self.response = self.request_agent.request()
+        self.requestAgent.set_search_parameter(self.nextPage)
+        self.response = self.requestAgent.request()
 
         # render the webpage since its source code is most likely JavaScript
         self.render()
 
-        self.next_page += 1
+        self.nextPage += 1
 
-    def get_job_posts(self):
+    def getJobPosts(self):
         """
         Get all the job post from the current webpage
 
@@ -69,16 +68,16 @@ class IndeedWebPage:
         # Need to change if the source code is updated
         sel = "[class*=\"tapItem fs-unmask result\"]"
         try:
-            job_posts = self.response.html.find(sel)
-            assert job_posts, "Failed to find jobtype posts"
+            jobPosts = self.response.html.find(sel)
+            assert jobPosts, "Failed to find jobtype posts"
         except Exception as error:
             util.error(str(error))
 
             quit(_QUIT)
         else:
-            return job_posts
+            return jobPosts
 
-    def get_num_jobs(self):
+    def getNumJobs(self):
         """
         Get the total number of job posts from the search result
 
@@ -96,16 +95,16 @@ class IndeedWebPage:
         else:
             text = tag.text
 
-            match = re.search(r"(?P<num_jobs>((?<=of )[0-9,]+(?= jobs)))", text)
-            content = match.group("num_jobs")
+            match = re.search(r"(?P<numJobs>((?<=of )[0-9,]+(?= jobs)))", text)
+            content = match.group("numJobs")
 
             content = content.replace(",", "")
 
-            num_jobs = int(content)
+            numJobs = int(content)
 
-            return num_jobs
+            return numJobs
 
-    def is_render(self):
+    def isRender(self):
         """
         Check if the webpage is render from JavaScript into HTML.
 
@@ -129,14 +128,14 @@ class IndeedWebPage:
 
         log = "Failed to render javascript : "
 
-        flag = self.is_render()
+        flag = self.isRender()
         timeout = 10
 
         while not flag:
 
             try:
                 self.response.html.render()
-                flag = self.is_render()
+                flag = self.isRender()
             except Exception as error:
                 util.error(log + str(error))
 

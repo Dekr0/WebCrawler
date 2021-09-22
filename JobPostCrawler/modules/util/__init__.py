@@ -12,4 +12,4 @@ RequestFactory = agent.RequestFactory
 
 SQLUtil = sql.SQLUtil
 
-url_encoder = encoder.url_encoder
+URLEncoder = encoder.URLEncoder

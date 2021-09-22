@@ -17,12 +17,12 @@ logging.basicConfig(filename="EventLog.log",
 
 
 def main():
-    setting = json.load(open(config.setting_path, "rb"))
+    setting = json.load(open(config.settingPath, "rb"))
 
     websiteName = setting["website"]
 
     # formatted search parameters
-    parameters = util.url_encoder(setting["parameters"])
+    parameters = util.URLEncoder(setting["parameters"])
 
     limit = setting["limit"]
 

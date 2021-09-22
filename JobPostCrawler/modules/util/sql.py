@@ -1,10 +1,7 @@
 import pyodbc
 
-"""
-Convert all query to parameterized query
-"""
 
-_ARGS = {
+_connectionParams = {
     "DRIVER": "{ODBC Driver 17 for SQL Server}",
     "SERVER": "localhost",
     "DATABASE": "Jobs",
@@ -12,63 +9,82 @@ _ARGS = {
     "PWD": "G12eT22Righ00t"
 }
 
-_p_str = ";".join([f"{arg}={value}" for arg, value in _ARGS.items()])
+# String for connection of MS SQL server
+_connectionString = ";".join([f"{param}={value}" for param, value in _connectionParams.items()])
 
 
 class SQLUtil:
 
-    def __init__(self):
-        self.__conn = pyodbc.connect(_p_str)
+    def __init__(self, table):
+        self.__conn = pyodbc.connect(_connectionString)
         self.__cursor = self.__conn.cursor()
+        self.__table = table
 
-    def haveTable(self, table):
-        if self.__cursor.tables(table=table, tableType='TABLE').fetchone():
+    def hasTable(self):
+        if self.__cursor.tables(table=self.__table, tableType='TABLE').fetchone():
             return True
 
         return False
 
-    def createTable(self, table, columnsDef):
-        column = ", ".join([f"{column_name} {_type}"
-                            for column_name, _type in columnsDef.items()])
+    def createTable(self, fields):
+        if self.hasTable():
+            return
 
-        query = f"CREATE TABLE {table} (" + column_declaration + ")"
+        nameTypePairs = []
+
+        for columnName, columnType in fields.items():
+            nameTypePairs.append(f"{columnName} {columnType}")
+
+        columnDefinition = ", ".join(nameTypePairs)
+
+        query = f"CREATE TABLE {self.__table} (" + columnDefinition + ")"
 
         self.__cursor.execute(query)
         self.__conn.commit()
 
-    def record_exist(self, table, conditions):
-        selector = " OR ".join([f"{column_name} LIKE '%{pattern}%'"
-                    for column_name, pattern in conditions.items()])
+    def hasRecord(self, conditions):
+        columnList = []
+        patternList = []
 
-        query = f"SELECT * FROM {_ARGS['DATABASE']}.dbo.{table} WHERE {selector}"
+        for columnName, pattern in conditions.items():
+            columnList.append(f"{columnName} LIKE (?)")
+            patternList.append(f"%{pattern}%")
 
-        row = self.__cursor.execute(query).fetchone()
+        selectors = " OR ".join(columnList)
+
+        query = f"SELECT * FROM {_connectionParams['DATABASE']}.dbo.{self.__table} WHERE {selectors}"
+
+        row = self.__cursor.execute(query, *patternList).fetchone()
 
         if row:
             return True
 
         return False
 
-    def delete_rows(self, table, conditions):
-        for pattern in conditions.values():
-            if '\'' in pattern:
-                pattern.replace("\'", "\'\'")
+    def deleteRow(self, conditions):
+        columnList = []
+        patternList = []
 
-        selector = " OR ".join([f"{column_name} LIKE '%{pattern}%'"
-                    for column_name, pattern in conditions.items()])
+        for columnName, pattern in conditions.items():
+            columnList.append(f"{columnName} LIKE (?)")
+            patternList.append(f"%{pattern}%")
 
-        query = f"DELETE FROM {_ARGS['DATABASE']}.dbo.{table} WHERE {selector}"
+        selectors = " OR ".join(columnList)
 
-        self.__cursor.execute(query)
+        query = f"DELETE FROM {_connectionParams['DATABASE']}.dbo.{self.__table} WHERE {selectors}"
+
+        self.__cursor.execute(query, *patternList)
         self.__cursor.commit()
 
-    def insert_row(self, table, data):
-        column_definition = f"{', '.join([column_name for column_name in data.keys()])}"
+    def insertRow(self, fields):
+        columnList = ", ".join(fields.keys())
+        parameterizedString = ", ".join(["?" for i in range(len(fields))])
 
-        query = f"INSERT INTO {_ARGS['DATABASE']}.dbo.{table}({column_definition}) " \
-                f"values ({', '.join(['?' for i in range(len(data))])})"
 
-        self.__cursor.execute(query, *(data.values()))
+        query = f"INSERT INTO {_connectionParams['DATABASE']}.dbo.{self.__table}({columnList}) " \
+                f"values ({parameterizedString})"
+
+        self.__cursor.execute(query, *(fields.values()))
         self.__cursor.commit()
 
     def close(self):

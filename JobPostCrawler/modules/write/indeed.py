@@ -5,34 +5,33 @@ import modules.jobtype as jobtype
 
 
 def main(jobs):
-    writer = util.SQLUtil()
-    columns_def = jobtype.IndeedJob.get_columns_def()
+    writer = util.SQLUtil("Indeed")
+    columnType = jobtype.IndeedJob.getColumnType()
 
-    if not writer.table_exist("Indeed"):
-        writer.create_table("Indeed", columns_def)
+    writer.createTable(columnType)
 
-    jobs_update = 0
-    jobs_wrote = 0
+    updatedJobs = 0
+    jobsWritten = 0
 
     for job in jobs:
-        info = job.get_info()
-        job_id = info["Id"]
-        job_company = info["Company"]
+        info = job.getJobInfo()
+        id = info["Id"]
+        company = info["Company"]
         conditions = {
-            "Id": job_id,
-            "Company": job_company
+            "Id": id,
+            "Company": company
         }
 
-        if writer.record_exist("Indeed", conditions):
-            writer.delete_rows("Indeed", conditions)
-            jobs_update += 1
+        if writer.hasRecord(conditions):
+            writer.deleteRow(conditions)
+            updatedJobs += 1
 
-        writer.insert_row("Indeed", info)
-        jobs_wrote += 1
+        writer.insertRow(info)
+        jobsWritten += 1
 
-    logging.info(f"Finished writing. Number of jobs written into database : {jobs_wrote}; "
-                 f"Number of jobs updated: {jobs_update}; "
-                 f"Number of new jobs written into database: {jobs_wrote - jobs_update}")
+    logging.info(f"Finished writing. Number of jobs written into database : {jobsWritten}; "
+                 f"Number of jobs updated: {updatedJobs}; "
+                 f"Number of new jobs written into database: {jobsWritten - updatedJobs}")
     print("Finish writing")
 
     return

@@ -7,37 +7,37 @@ import datetime
 
 class IndeedJob:
 
-    def __init__(self, company, day_post, id, link, location, summary, title):
+    def __init__(self, company, postedDay, id, link, location, summary, title):
         self.company = company
-        self.day_post = day_post
+        self.postedDay = postedDay
         self.id = id
         self.link = link
         self.location = location
         self.summary = summary
         self.title = title
-        self.update_time = str(datetime.datetime.now())
+        self.updatedTime = str(datetime.datetime.now())
 
     @staticmethod
-    def get_columns_def():
+    def getColumnType():
         """
         :return: a dictionary that specify the data type and length in SQL for each
         column
         """
 
-        columns_def = {
+        columnType = {
             "Id": "VARCHAR(32)",
             "Title": "VARCHAR(MAX)",
             "Location": "VARCHAR(60)",
             "Company": "VARCHAR(180)",
-            "DayPost": "VARCHAR(30)",
+            "PostedDay": "VARCHAR(30)",
             "Summary": "VARCHAR(MAX)",
             "Link": "VARCHAR(MAX)",
-            "UpdateTime": "VARCHAR(120)",
+            "UpdatedTime": "VARCHAR(120)",
          }
 
-        return columns_def
+        return columnType
 
-    def get_info(self):
+    def getJobInfo(self):
         """
         :return: job information
         """
@@ -47,10 +47,10 @@ class IndeedJob:
             "Title": self.title,
             "Location": self.location,
             "Company": self.company,
-            "DayPost": self.day_post,
+            "PostedDay": self.postedDay,
             "Summary": self.summary,
             "Link": self.link,
-            "UpdateTime": self.update_time,
+            "UpdatedTime": self.updatedTime,
         }
 
         return info

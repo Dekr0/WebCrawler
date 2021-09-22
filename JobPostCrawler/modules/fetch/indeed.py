@@ -21,7 +21,7 @@ def _pause():
     """
 
     sleepTime = _rnd.randint(0, 60)
-    log = f"Pause for {sleepTime}"
+    log = f"Pause for {sleepTime} seconds"
 
     util.info(log)
 
@@ -39,10 +39,10 @@ def _fetch(params, limit):
     """
 
     webpage = response.IndeedWebPage(params)
-    webpage.get_next_webpage()  # The first page of the search result
+    webpage.getNextWebpage()  # The first page of the search result
 
     # The total number of jobtype posts from the search result
-    totalJobPosts = webpage.get_num_jobs()
+    totalJobPosts = webpage.getNumJobs()
     jobPostsList = adt.IterableQueue()  # A queue for jobtype posts collection
 
     finished = False
@@ -50,7 +50,7 @@ def _fetch(params, limit):
         # Return a list of job posts (a list of HTML elements that represent the
         # job posts in the webpage to be more specifically)
 
-        jobPosts = webpage.get_job_posts()
+        jobPosts = webpage.getJobPosts()
 
         for job_post in jobPosts:
             jobPostsList.put(job_post)
@@ -62,7 +62,7 @@ def _fetch(params, limit):
                 break
 
         if not finished:
-            progress_status = f"Current Page: {webpage.next_page - 1};" \
+            progress_status = f"Current Page: {webpage.nextPage - 1};" \
                    f"Number of jobtype posts fetched in current page : {len(jobPosts)};" \
                    f"Number of jobtype posts fetched in total : {len(jobPostsList)};" \
                    f"Number of jobtype posts remained to fetched : {totalJobPosts}"
@@ -72,7 +72,7 @@ def _fetch(params, limit):
             _pause()
 
         # webpage.close()  # close the response for the current webpage
-        webpage.get_next_webpage()  # get the response for the next webpage
+        webpage.getNextWebpage()  # get the response for the next webpage
 
     webpage.disconnect()  # close the HTML session and chromium
 

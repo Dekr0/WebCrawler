@@ -2,14 +2,14 @@
 # -*- coding:utf-8 -*-
 
 
-__all__ = ["url_encoder"]
+__all__ = ["URLEncoder"]
 
 
-def _html_encoder(char):
+def _htmlEncoder(char):
     return "+" if char.isspace() else f"%{hex(ord(char)).split('x')[1].upper()}"
 
 
-def url_encoder(params):
+def URLEncoder(params):
     """
     Convert the special characters in the parameters string into the HTML encoder
 
@@ -19,6 +19,6 @@ def url_encoder(params):
 
     for key in params.keys():
         params[key] = "".join([char if char.isdigit() or char.isalpha() else
-                               _html_encoder(char) for char in params[key]])
+                               _htmlEncoder(char) for char in params[key]])
 
     return params
