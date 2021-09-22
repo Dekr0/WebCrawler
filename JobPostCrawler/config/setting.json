@@ -3,5 +3,6 @@
   "parameters": {
     "keyword": "Computer Engineer",
     "location": "Toronto, ON"
-  }
+  },
+  "limit": 3
 }

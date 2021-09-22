@@ -10,8 +10,6 @@ __all__ = ["main"]
 
 _QUIT = "Check EventLog.log"
 
-_JOB_LIMIT = 100  # number of jobtype posts
-
 _rnd = random.SystemRandom()
 
 
@@ -22,15 +20,15 @@ def _pause():
     :return: None
     """
 
-    sleep_time = _rnd.randint(120, 180)
-    log = f"Pause for {sleep_time}"
+    sleepTime = _rnd.randint(0, 60)
+    log = f"Pause for {sleepTime}"
 
     util.info(log)
 
-    time.sleep(sleep_time)
+    time.sleep(sleepTime)
 
 
-def _fetch(params):
+def _fetch(params, limit):
     """
     fetch jobtype post in each page until it reach desire number of jobtype posts.
     Generally, each page should have 15 jobtype posts but there are exceptions.
@@ -44,49 +42,49 @@ def _fetch(params):
     webpage.get_next_webpage()  # The first page of the search result
 
     # The total number of jobtype posts from the search result
-    total_job_posts = webpage.get_num_jobs()
-    job_posts_list = adt.IterableQueue()  # A queue for jobtype posts collection
+    totalJobPosts = webpage.get_num_jobs()
+    jobPostsList = adt.IterableQueue()  # A queue for jobtype posts collection
 
     finished = False
     while not finished:
         # Return a list of job posts (a list of HTML elements that represent the
         # job posts in the webpage to be more specifically)
 
-        job_posts = webpage.get_job_posts()
+        jobPosts = webpage.get_job_posts()
 
-        for job_post in job_posts:
-            job_posts_list.put(job_post)
-            total_job_posts -= 1
+        for job_post in jobPosts:
+            jobPostsList.put(job_post)
+            totalJobPosts -= 1
 
             # Stop the fetch process if find enough job posts
-            if total_job_posts <= 0 or len(job_posts_list) == _JOB_LIMIT:
+            if totalJobPosts <= 0 or len(jobPostsList) == limit:
                 finished = True
                 break
 
         if not finished:
             progress_status = f"Current Page: {webpage.next_page - 1};" \
-                       f"Number of jobtype posts fetched in current page : {len(job_posts)};" \
-                       f"Number of jobtype posts fetched in total : {len(job_posts_list)};" \
-                       f"Number of jobtype posts remained to fetched : {total_job_posts}"
+                   f"Number of jobtype posts fetched in current page : {len(jobPosts)};" \
+                   f"Number of jobtype posts fetched in total : {len(jobPostsList)};" \
+                   f"Number of jobtype posts remained to fetched : {totalJobPosts}"
 
             util.info(progress_status)
 
             _pause()
 
-        webpage.close()  # close the response for the current webpage
+        # webpage.close()  # close the response for the current webpage
         webpage.get_next_webpage()  # get the response for the next webpage
 
     webpage.disconnect()  # close the HTML session and chromium
 
-    log = f"Job posts fetch completed. Number of jobtype posts fetched : {len(job_posts_list)}"
+    log = f"Job posts fetch completed. Number of jobtype posts fetched : {len(jobPostsList)}"
     util.info(log)
 
-    return job_posts_list
+    return jobPostsList
 
 
-def main(params):
+def main(params, limit):
 
     # Start the jobtype post gathering process
-    job_posts_list = _fetch(params)
+    jobPostsList = _fetch(params, 15 * limit)
 
-    return job_posts_list
+    return jobPostsList

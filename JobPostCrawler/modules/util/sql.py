@@ -1,11 +1,14 @@
 import pyodbc
 
+"""
+Convert all query to parameterized query
+"""
 
 _ARGS = {
     "DRIVER": "{ODBC Driver 17 for SQL Server}",
     "SERVER": "localhost",
     "DATABASE": "Jobs",
-    "UID": "sa",
+    "UID": "SA",
     "PWD": "G12eT22Righ00t"
 }
 
@@ -18,15 +21,15 @@ class SQLUtil:
         self.__conn = pyodbc.connect(_p_str)
         self.__cursor = self.__conn.cursor()
 
-    def table_exist(self, table):
+    def haveTable(self, table):
         if self.__cursor.tables(table=table, tableType='TABLE').fetchone():
             return True
 
         return False
 
-    def create_table(self, table, columns_def):
-        column_declaration = ", ".join([f"{column_name} {_type}"
-                            for column_name, _type in columns_def.items()])
+    def createTable(self, table, columnsDef):
+        column = ", ".join([f"{column_name} {_type}"
+                            for column_name, _type in columnsDef.items()])
 
         query = f"CREATE TABLE {table} (" + column_declaration + ")"
 

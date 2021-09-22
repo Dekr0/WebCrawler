@@ -92,7 +92,7 @@ def _get_summary(job_post):
     :return:
     """
 
-    selector = "div.jobtype-snippet"
+    selector = "div.job-snippet"
     try:
         summary_tag = job_post.find(selector, first=True)
         assert summary_tag, "Failed to find summary"

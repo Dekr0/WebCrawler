@@ -19,23 +19,25 @@ logging.basicConfig(filename="EventLog.log",
 def main():
     setting = json.load(open(config.setting_path, "rb"))
 
-    website_name = setting["website"]
+    websiteName = setting["website"]
 
     # formatted search parameters
     parameters = util.url_encoder(setting["parameters"])
 
+    limit = setting["limit"]
+
     # main function that start the fetch process
-    fetch_func = fetch.get(website_name)
+    fetchFunc = fetch.get(websiteName)
     # a list of job posts represented by HTML elements
-    fetch_result = fetch_func(parameters)
+    fetchResult = fetchFunc(parameters, limit)
 
     # main function that start the extract process
-    extract_func = extract.get(website_name)
+    extractFunc = extract.get(websiteName)
     # extract the information from the job post using integrated selector
-    extract_result = extract_func(fetch_result)
+    extractResult = extractFunc(fetchResult)
 
-    writer = write.get(website_name)
-    writer(extract_result)
+    writer = write.get(websiteName)
+    writer(extractResult)
 
 if __name__ == "__main__":
     main()
